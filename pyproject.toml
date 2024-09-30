@@ -1,0 +1,11 @@
+[project]
+name = "huhu"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "colorama>=0.4.6",
+    "shellingham>=1.5.4",
+    "typer>=0.12.5",
+]
