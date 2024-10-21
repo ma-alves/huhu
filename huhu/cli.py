@@ -1,6 +1,7 @@
-from typing import Optional
+from typing import Annotated, List, Optional
 
-from huhu import __app_name__, __version__
+from huhu import __app_name__, __version__, DATABASE
+from huhu.huhu import HuhuController
 
 import typer
 
@@ -25,3 +26,19 @@ def main(
     )
 ) -> None:
     return
+
+
+@app.command()
+def add(
+    humor: int = typer.Argument(..., min=1, max=5),
+    description: Annotated[List[str], typer.Argument()] = None,
+) -> None:
+    '''Add a new humor record to the humor tracker.'''
+    
+    huhu_controller = HuhuController(DATABASE)
+    record = huhu_controller.add_record(humor, description)
+    
+    typer.secho(
+        f"Record '{record['humor']}' was added at {record['datetime']}.",
+        fg=typer.colors.GREEN
+    )

@@ -11,6 +11,9 @@ HUMOR = {
     5: 'great'
 }
 
+DATABASE = 'database.json'
+TEST_DATABASE = 'test_database.json'
+
 # Sem uso por enquanto
 (
     SUCCESS,
