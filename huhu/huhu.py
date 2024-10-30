@@ -23,7 +23,6 @@ class HuhuController:
             description_text += '.'
 
         if not isinstance(humor, int):
-            print('Invalid type.')
             return None
 
         record = {
@@ -43,7 +42,7 @@ class HuhuController:
     def read_record_by_id(self, id: int) -> Document:
         record = self._db_handler.get(doc_id=id)
         if not record:
-            print('Record not found.')
+            # print('Record not found.')
             return None
         return record
 
@@ -56,9 +55,15 @@ class HuhuController:
         return records
 
 
+    # Definir o que mudar por option: -h: humor -d: descrição -t: datetime
     def update_record(self) -> Document:
         ...
 
 
-    def delete_record(self) -> str:
-        ...
+    def remove_record(self, id: int) -> str:
+        try:
+            record = self._db_handler.remove(doc_ids=[id])
+        except:
+            return None
+        else:
+            return record
