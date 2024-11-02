@@ -1,7 +1,9 @@
-from huhu import cli, __app_name__
+from huhu import cli
+
 
 def main():
     cli.app()
+
 
 if __name__ == "__main__":
     main()

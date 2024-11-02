@@ -1,6 +1,3 @@
-from datetime import datetime
-from typing import NamedTuple
-
 from tinydb import TinyDB
 
 

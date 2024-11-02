@@ -1,4 +1,3 @@
-from tinydb import TinyDB
 from typer.testing import CliRunner
 
 from huhu.cli import app
@@ -8,13 +7,12 @@ runner = CliRunner()
 
 
 def test_app_version():
-    result = runner.invoke(app, '--version')
+    result = runner.invoke(app, "--version")
     assert result.exit_code == 0
-    assert 'huhu v0.1.0' in result.stdout
+    assert "huhu v0.1.0" in result.stdout
 
 
 def test_app_add():
-    result = runner.invoke(app, ['add', '1', 'i wanna die'])
+    result = runner.invoke(app, ["add", "1", "i wanna die"])
     assert result.exit_code == 0
-    assert 'Humor record was added.' in result.stdout
-    
+    assert "foi adicionado às" in result.stdout
