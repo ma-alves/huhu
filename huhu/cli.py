@@ -32,7 +32,7 @@ def main(
 @app.command(name="add")
 def add(
     humor: int = typer.Argument(..., min=1, max=5),
-    description: Annotated[List[str], typer.Argument()] = None,
+    description: Annotated[List[str], typer.Option("-d")] = None,
 ) -> None:
     """Adicionar novo registro de humor."""
 
@@ -53,10 +53,10 @@ def list_all() -> None:
     records = huhu_controller.read_records()
 
     if len(records) > 0:
-        typer.secho("ID - HUMOR - DESCRIÇÃO - DATA")
+        typer.secho("ID - HUMOR - DATA")
         for record in records:
             typer.secho(
-                f"{record.doc_id} - {record['humor']} - {record['description']} - {record['datetime']}"
+                f"{record.doc_id} - {record['humor']} - {record['datetime']}"
             )
     else:
         typer.secho(
@@ -69,7 +69,7 @@ def list_one(record_id: int = typer.Argument(...)) -> None:
     """Mostrar registro de humor por id."""
 
     huhu_controller = HuhuController(DATABASE)
-    record = huhu_controller.read_record_by_id(record_id)
+    record = huhu_controller.read_record(record_id)
 
     if not record:
         typer.secho("Registro não encontrado.", fg=typer.colors.RED)
@@ -78,10 +78,34 @@ def list_one(record_id: int = typer.Argument(...)) -> None:
         typer.secho(
             f'Humor: {record['humor'].capitalize()}\n'
             f'Descrição: {record['description']}\n'
-            f'Data: {record['datetime']}'
+            f'Hora e Data: {record['datetime']}'
         )
 
 
+@app.command(name="update")
+def update(
+    record_id: int = typer.Argument(...),
+    humor: Annotated[int, typer.Option("-h")] = None,
+    description: Annotated[List[str], typer.Option("-d")] = None,
+) -> None:
+    """Atualizar registro de humor."""
+    if not humor and not description:
+        typer.secho("Nenhuma opção foi passada.", fg=typer.colors.RED)
+        raise typer.Exit(1)
+
+    huhu_controller = HuhuController(DATABASE)
+    record = huhu_controller.update_record(record_id, humor, description)
+
+    if not record:
+        typer.secho("Registro não encontrado.", fg=typer.colors.RED)
+        raise typer.Exit(1)
+
+    typer.secho(
+        f"Registro #{record_id} foi atualizado.", fg=typer.colors.GREEN
+    )
+
+
+# Adicionar prompt de confirmação
 @app.command(name="remove")
 def remove(record_id: int = typer.Argument(...)) -> None:
     """Remove registro de humor por id."""
@@ -93,4 +117,4 @@ def remove(record_id: int = typer.Argument(...)) -> None:
         typer.secho("Registro não encontrado.", fg=typer.colors.RED)
         raise typer.Exit(1)
 
-    typer.secho(f"Registro #{record_id} foi removido.")
+    typer.secho(f"Registro #{record_id} foi removido.", fg=typer.colors.GREEN)
