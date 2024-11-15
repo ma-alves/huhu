@@ -105,16 +105,27 @@ def update(
     )
 
 
-# Adicionar prompt de confirmação
 @app.command(name="remove")
-def remove(record_id: int = typer.Argument(...)) -> None:
+def remove(
+    record_id: int = typer.Argument(...),
+    force: bool = typer.Option(..., prompt="Você quer mesmo deletar este registro?")
+) -> None:
     """Remove registro de humor por id."""
 
-    huhu_controller = HuhuController(DATABASE)
-    record = huhu_controller.remove_record(record_id)
+    if force:
+        huhu_controller = HuhuController(DATABASE)
+        record = huhu_controller.remove_record(record_id)
 
-    if not record:
-        typer.secho("Registro não encontrado.", fg=typer.colors.RED)
-        raise typer.Exit(1)
+        if not record:
+            typer.secho("Registro não encontrado.", fg=typer.colors.RED)
+            raise typer.Exit(1)
 
-    typer.secho(f"Registro #{record_id} foi removido.", fg=typer.colors.GREEN)
+        typer.secho(f"Registro #{record_id} foi removido.", fg=typer.colors.GREEN)
+
+    else:
+        typer.secho("Operação cancelada.", fg=typer.colors.RED)
+
+# todo!()
+@app.command(name="remove-all")
+def remove_all():
+    ...
