@@ -8,8 +8,8 @@ from huhu import HUMOR
 
 
 class HuhuController:
-    def __init__(self, database) -> None:
-        self._db_handler = DatabaseHandler(database).get_db()
+    def __init__(self) -> None:
+        self._db_handler = DatabaseHandler().get_db()
 
     def add_record(self, humor: int, description: List[str] | None) -> Dict:
         if not description:
@@ -58,3 +58,6 @@ class HuhuController:
 
     def remove_record(self, id: int) -> str:
         return self._db_handler.remove(doc_ids=[id])
+
+    def remove_all_records(self) -> str:
+        self._db_handler.truncate()
